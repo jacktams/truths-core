@@ -10,6 +10,13 @@
 // Apply the java plugin to add support for Java
 apply plugin: 'java'
 
+plugins {
+    id 'net.saliman.cobertura' version '2.3.1'
+    id 'com.github.kt3k.coveralls' version '2.6.3'
+}
+
+cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
+
 // In this section you declare where to find the dependencies of your project
 repositories {
     // Use 'jcenter' for resolving your dependencies.
@@ -27,3 +34,20 @@ dependencies {
 }
 
 test.useTestNG()
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
+compileTestJava {    
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut"
+    }
+}        
+
+defaultTasks 'build'
